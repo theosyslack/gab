@@ -1,2 +1,1 @@
-import {Marked} from 'https://deno.land/x/markdown/mod.ts'
-
+import { Marked } from "https://deno.land/x/markdown/mod.ts";
