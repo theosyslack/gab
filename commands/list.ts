@@ -6,11 +6,9 @@ import * as Fae from 'https://deno.land/x/fae/mod.ts'
 
 function groupFilesByFolder(files: MarkdownFile[]) {
   return files.reduce((acc, { path, name }) => {
-    const tree = path.split('/').slice(0, -1).concat(["files"])
-    const lens = Fae.lensPath(tree)
-    const previous = Fae.path(tree, acc) || []
-    const result = Fae.set(lens, [...previous, name], acc)
-    return result
+    const tree = path.split('/').slice(0, -1).join('/')
+    const previous = Fae.prop(tree, acc) || []
+    return Object.assign({}, acc, {[tree]: [...previous, name]})
   }, {})
 }
 
@@ -18,7 +16,7 @@ async function list(path?: string) {
   if (path === undefined) {
     return console.error("Must supply a directory path to `list`.");
   }
-
+  
   const realPath = await getMaybePath(path);
 
   if (realPath) {
