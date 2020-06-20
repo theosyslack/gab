@@ -1,18 +1,17 @@
 import { MarkdownFile } from "../types/Directory.ts";
 
 async function findMarkdownFiles(
-  directoryPath: string,
+  directory: string,
   depth: number = 5,
 ): Promise<MarkdownFile[]> {
   let files: MarkdownFile[] = [];
 
-  for await (const entry of Deno.readDir(directoryPath)) {
-    const {name, isDirectory, isFile} = entry;
-    const path = directoryPath + "/" + name
+  for await (const entry of Deno.readDir(directory)) {
+    const { name, isDirectory, isFile } = entry;
+    const path = directory + "/" + name
 
     if (isFile && path.endsWith(".md")) {
-      const [basename] = name.split('.') 
-      const [directory] = name.split("/").slice(0, -1).join("/")
+      const [basename] = name.split('.')
       files = files.concat([{ path, name, directory, basename }])
     }
 

@@ -1,25 +1,29 @@
 
 import getMaybePath from "../io/getMaybePath.ts";
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
-
+import { ensureFile } from "https://deno.land/std/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
 
 async function build(path?: string, output: string = "./build") {
   if (path === undefined) {
     return console.error("Must supply a directory path to `build`.");
   }
-  
+
   const realPath = await getMaybePath(path);
 
   if (realPath) {
     const files = await findMarkdownFiles(path);
-    
+
     await Promise.all(files.map(async (file) => {
-        console.log(`Building ${file.path}`)
-        const html = await convertMarkdownFile(file)
-        const outputPath = output + file.path + file.basename + '.html'
-        await Deno.writeTextFile(outputPath, html)
-        console.log(outputPath)
+      const outputPath = output + "/" + file.directory + "/" + file.basename + '.html'
+      console.log(`Building ${outputPath}`)
+
+      await ensureFile(outputPath)
+
+      const html = await convertMarkdownFile(file)
+      console.log(outputPath)
+      await Deno.writeTextFile(outputPath, html)
+      console.log(outputPath)
     }))
 
   } else {
