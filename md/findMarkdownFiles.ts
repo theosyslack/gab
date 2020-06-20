@@ -7,14 +7,16 @@ async function findMarkdownFiles(
   let files: MarkdownFile[] = [];
 
   for await (const entry of Deno.readDir(directoryPath)) {
-    const path = directoryPath + "/" + entry.name
-    if (entry.isFile && path.endsWith(".md")) {
-      const { name } = entry;
+    const {name, isDirectory, isFile} = entry;
+    const path = directoryPath + "/" + name
 
-      files = files.concat([{ path, name }])
+    if (isFile && path.endsWith(".md")) {
+      const [basename] = name.split('.') 
+      const [directory] = name.split("/").slice(0, -1).join("/")
+      files = files.concat([{ path, name, directory, basename }])
     }
 
-    if (entry.isDirectory && depth > 0) {
+    if (isDirectory && depth > 0) {
       files = files.concat(await findMarkdownFiles(path))
     }
   }
