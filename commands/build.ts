@@ -1,7 +1,7 @@
 
 import getMaybePath from "../io/getMaybePath.ts";
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
-import { ensureFile, exists, move } from "https://deno.land/std/fs/mod.ts";
+import { ensureFile, emptyDir, exists, copy } from "https://deno.land/std/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
 
 const logGreen = (message: string) => {
@@ -22,13 +22,13 @@ async function build(path?: string, output: string = "./build") {
 
   const template = await exists(path + "/template.html") ? await Deno.readTextFile(path + "/template.html") : '<%= content %>'
   const hasPublic = await exists(path + "/public")
-  console.log(path + "/public")
-
 
   if (await exists(path)) {
     const files = await findMarkdownFiles(path);
     const total = files.length
     let count = 0;
+
+    await emptyDir(output)
 
     await Promise.all(files.map(async (file) => {
       const fixedPath = file.directory.replace(path, "").replace("//", "")
@@ -44,9 +44,7 @@ async function build(path?: string, output: string = "./build") {
 
 
     if (hasPublic) {
-      console.log('moving', path + "/public")
-      await move(path + "/public", output + "/public")
-      console.log("did it")
+      await copy(path + "/public", output + "/public")
     }
   } else {
     console.error(`'${path}' is not a valid path`);
