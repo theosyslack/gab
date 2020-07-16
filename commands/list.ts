@@ -8,6 +8,7 @@ function groupFilesByFolder(files: MarkdownFile[]) {
   return files.reduce((acc, { path, name }) => {
     const tree = path.split('/').slice(0, -1).join('/')
     const previous: any[] = [Fae.prop(tree, acc)].flat()
+    //@ts-ignore
     return Object.assign({}, acc, { [tree]: [...previous, name] })
   }, {})
 }
