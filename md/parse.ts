@@ -1,4 +1,7 @@
-import { Frontmatter } from "./Frontmatter.ts";
+import { getFrontmatter } from "./Frontmatter.ts";
+import path from 'https://deno.land/x/ramda/path.js';
+import color from 'https://deno.land/x/color/index.ts'
+import lineOf from './lineOf.ts'
 
 export const templateRegex = new RegExp(/{{[\s\S]+?}}/, 'g')
 
@@ -17,23 +20,25 @@ export const getTemplateTags = (md: string): Set<TemplateTag> => {
     }
 
     return tags
-    // Deno.exit(1)
 }
 
 
-export const updateTemplateTags = (md: string, frontmatter: Frontmatter): string => {
+export const updateTemplateTags = (raw: string): string => {
+    const { frontmatter, md } = getFrontmatter(raw)
+    if (!frontmatter) return md;
+
     const tags = getTemplateTags(md)
     let result = md;
 
     for (const tag of tags) {
-        const value = frontmatter.get(tag.key);
+        const value = path(tag.key.split('.'), frontmatter);
         if (value) {
             result = result.replace(tag.match, value)
+        } else {
+            console.warn(color.yellow.text(`    ${tag.match} on Line ${lineOf(raw, tag.match)} does not match with any Frontmatter data`))
         }
     }
 
-    console.log(result)
     return result
-    // Deno.exit(1)
 }
 

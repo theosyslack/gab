@@ -1,4 +1,5 @@
-import { MarkdownFile } from "../types/Directory.ts";
+import { MarkdownFile } from "../types.ts";
+import { getFrontmatter } from "./Frontmatter.ts";
 
 async function findMarkdownFiles(
   directory: string,
@@ -12,7 +13,9 @@ async function findMarkdownFiles(
 
     if (isFile && path.endsWith(".md")) {
       const [basename] = name.split('.')
-      files = files.concat([{ path, name, directory, basename }])
+      const raw = await Deno.readTextFile(path)
+      const { frontmatter, md } = getFrontmatter(raw)
+      files = files.concat([{ path, name, directory, basename, raw, frontmatter, md }])
     }
 
     if (isDirectory && depth > 0) {

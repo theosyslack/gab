@@ -1,12 +1,14 @@
 ---
 title: Testing
 subtitle: Testing
-name: Theo
-title: Bleep 
+me:
+  first: Theo
+  last: Syslack
+  job: Developer
 ---
 
-# Homepage
+# {{title}}
 
-Hi I'm {{name}} and this is my {{ type }} {{ name}}
+Hi I'm {{me.first}} {{me.last}} and I am a {{me.skill}}
 
 [Blog](/blog)

@@ -1,6 +1,6 @@
 import getMaybePath from "../io/getMaybePath.ts";
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
-import { MarkdownFile } from "../types/Directory.ts";
+import { MarkdownFile } from "../types.ts";
 
 import * as Fae from 'https://deno.land/x/fae/mod.ts'
 

@@ -1,9 +1,6 @@
-export interface ParsedMarkdown {
-    frontmatter: Frontmatter | null,
-    md: string
-}
+import { load } from 'https://deno.land/x/js_yaml_port/js-yaml.js'
+import { ParsedMarkdown } from '../types.ts'
 
-export type Frontmatter = Map<string, string>
 
 export const frontmatterRegex = new RegExp(/^---[\s\S]+?---/)
 
@@ -20,14 +17,8 @@ export function hasFrontmatter(string: string): boolean {
     return !!match
 }
 
-export function parseFrontmatter(frontmatterString: string): Map<string, string> {
-    const lines = frontmatterString.split('\n')
-    const keyValuePairs = lines.filter(line => line.includes(":"))
+export function parseFrontmatter(frontmatterString: string): object {
+    const yaml = frontmatterString.split('\n').filter(s => s !== '---').join('\n');
 
-    const frontmatter = keyValuePairs.reduce((acc, line) => {
-        const [key, value] = line.split(':')
-        acc.set(key.trim(), value.trim())
-        return acc
-    }, new Map())
-    return frontmatter
+    return load(yaml)
 }

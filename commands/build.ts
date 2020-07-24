@@ -1,15 +1,7 @@
-
-import getMaybePath from "../io/getMaybePath.ts";
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
 import { ensureFile, emptyDir, exists, copy } from "https://deno.land/std/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
-
-const logGreen = (message: string) => {
-  const green = "\u001b[32m"
-  const reset = "\u001b[0m"
-
-  console.log(`${green}${message}${reset}`)
-}
+import clc from 'https://deno.land/x/color/index.ts'
 
 const counter = (count: number, total: number) => {
   return `[${count.toString().padStart(total.toString().length, " ")}/${total}]`
@@ -30,7 +22,7 @@ async function build(path?: string, output: string = "./build") {
 
     await emptyDir(output)
 
-    await Promise.all(files.map(async (file) => {
+    for await (const file of files) {
       const fixedPath = file.directory.replace(path, "").replace("//", "")
 
       const outputPath = output + fixedPath + "/" + file.basename + '.html'
@@ -39,9 +31,9 @@ async function build(path?: string, output: string = "./build") {
       const html = await convertMarkdownFile(file)
 
       await Deno.writeTextFile(outputPath, template.replace("<%= content %>", html))
-      logGreen(`${counter(++count, total)} ${outputPath}`)
-    }))
 
+      console.log(clc.green.text(`${counter(++count, total)} ${outputPath}`))
+    }
 
     if (hasPublic) {
       await copy(path + "/public", output + "/public")
