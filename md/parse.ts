@@ -1,5 +1,5 @@
 import { getFrontmatter } from "./Frontmatter.ts";
-import path from 'https://deno.land/x/ramda/path.js';
+import path from 'https://deno.land/x/ramda@v0.27.0/path.js';
 import color from 'https://deno.land/x/color/index.ts'
 import lineOf from './lineOf.ts'
 

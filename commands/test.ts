@@ -1,6 +1,5 @@
 
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
-import { ensureFile, exists } from "https://deno.land/std/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
 
 async function test(...args: string[]) {

@@ -1,5 +1,5 @@
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
-import { ensureFile, emptyDir, exists, copy } from "https://deno.land/std/fs/mod.ts";
+import { ensureFile, emptyDir, exists, copy } from "https://deno.land/std@0.62.0/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
 import clc from 'https://deno.land/x/color/index.ts'
 

@@ -1,5 +1,5 @@
 import build from './build.ts';
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import { exists } from "https://deno.land/std@0.62.0/fs/mod.ts";
 
 async function watch(path?: string, output: string = "./build") {
   if (path === undefined) {
