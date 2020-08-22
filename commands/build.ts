@@ -1,7 +1,6 @@
 import findMarkdownFiles from "../md/findMarkdownFiles.ts";
 import { ensureFile, emptyDir, exists, copy } from "https://deno.land/std@0.62.0/fs/mod.ts";
 import convertMarkdownFile from "../md/convertMarkdownFile.ts";
-import clc from 'https://deno.land/x/color/index.ts'
 
 const counter = (count: number, total: number) => {
   return `[${count.toString().padStart(total.toString().length, " ")}/${total}]`
@@ -32,7 +31,7 @@ async function build(path?: string, output: string = "./build") {
 
       await Deno.writeTextFile(outputPath, template.replace("<%= content %>", html))
 
-      console.log(clc.green.text(`${counter(++count, total)} ${outputPath}`))
+      console.log(`${counter(++count, total)} ${outputPath}`)
     }
 
     if (hasPublic) {
